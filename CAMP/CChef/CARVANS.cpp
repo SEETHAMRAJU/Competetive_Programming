@@ -11,23 +11,13 @@ int main()
 		int n,count = 1;
 		vector <int> q;
 		cin >> n;
-		
 		for(int i=0;i<n;i++)
 		{
 			cin >> temp;
 			q.append(temp);
 		}
-		if(n == 5)
-		{
-			if(q[0] == 4 && q[1] == 5 && q[2] == 1 && q[3] == 2 && q[4] == 3)
-			{
-				answer.append(2);
-				t--;
-				continue;
-			}
-		}
-		int current = q[n-1];
-		for(int i=n-2;i>=0;i--)
+		int current = q[0];
+		for(int i= 1; i < n ;i++)
 		{
 			if(current >= q[i])
 			{

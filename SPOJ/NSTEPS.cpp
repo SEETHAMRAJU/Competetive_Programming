@@ -1,69 +1,45 @@
-
 #include<bits/stdc++.h>
 #define append push_back
-#define insert push_front
-#define pop pop_back()
-
+#define llint long long int
 using namespace std;
-
 int main()
 {
-	int t;
-	cin >> t;
-	vector <int> arr;
-	int temp1,temp2;
-	while(t>0)
+	llint t;
+	vector <llint> answer;
+	scanf("%lld",&t);
+	for(llint i= 0;i<t;i++)
 	{
-		cin >> temp1 >> temp2;
-		if(temp1 <2)
-		{
-			if(temp1 == temp2)
-			{
-				arr.push_back(temp1);
-			}
+		llint x,y;
+		scanf("%lld %lld",&x,&y);
+		if(x == y)
+		{		
+			if(x  < 2 && y < 2)
+				answer.append(x);
+			else if(x%2 == 0)			
+				answer.append(2*x);
 			else
-			{
-				arr.push_back(-100);	
-			}
+				answer.append(2*x - 1);			
+	
 		}
-		else if(temp1 == temp2)
+		else if(y == x-2)
 		{
-			if(temp1%2 == 0)
-			{
-				arr.push_back((2*temp1));
-			}
+
+			if(y%2 == 0)
+				answer.append(x+y);
 			else
-			{
-				arr.push_back((2*temp1) + 1);
-			}
-		}
-		else if(temp1 - temp2 == 2)
-		{
-			if(temp1%2 == 0)
-			{
-				arr.push_back(temp1+temp2);
-			}
-			else
-			{
-				arr.push_back(temp1 + temp2 - 1);
-			}
+				answer.append(x+y-1);
 		}
 		else
 		{
-			arr.push_back(-100);
+			answer.append(-1000);
 		}
-		t--;
 	}
-	for(int i=0;i<arr.size();i++)
+	for(llint i=0;i<answer.size();i++)
 	{
-		if(arr[i] == -100)
-		{
-			cout << "No Number" << endl;
-		}
+		if(answer[i] >-1)		
+			printf("%lld\n",answer[i]);
 		else
-		{
-			cout << arr[i] << endl;
-		}
-	}
+			printf("No Number\n");	
+	} 
 	return 0;
 }
