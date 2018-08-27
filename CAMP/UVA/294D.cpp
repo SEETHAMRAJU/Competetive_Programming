@@ -7,6 +7,7 @@ llint check(llint n);
 pair<llint,llint> solve(llint l,llint u);
 void pri();
 int primes[N];
+llint l,u;
 vector <int> prime;
 int main()
 {
@@ -14,21 +15,18 @@ int main()
 	scanf("%d",&t);
 	vector <pair<llint,llint>> ans;
 	pri();
-/*	for(int i=0;i<t;i++)
+	vector <pair<llint,llint>> q;
+	for(int i=0;i<t;i++)
 	{
-		long long int l;
-		long long int u;
 		scanf("%lld", &l);
 		scanf("%lld",&u);
+		q.append(make_pair(l,u));
 		ans.append(solve(l,u));
-	}*/
-	llint temp;
-	scanf("%lld",&temp);
-	printf("%lld\n",check(temp));
-	/*for(int i=0;i<t;i++)
+	}
+	for(int i=0;i<t;i++)
 	{
-		printf("%lld\t%lld\n",ans[i].first,ans[i].second);
-	}*/
+		printf("Between %lld and %lld, %lld has a maximum of %lld divisors.\n",q[i].first,q[i].second,ans[i].first,ans[i].second);
+	}
 	return 0;
 
 }
@@ -68,7 +66,6 @@ pair<llint,llint> solve(llint l,llint u)
 	for(llint i=l;i<=u;i++)
 	{
 		llint o = check(i);
-		//printf("%lld %lld\n",i,o);
 		if(o>maxquan)
 		{
 			maxquan = o;
@@ -80,18 +77,17 @@ pair<llint,llint> solve(llint l,llint u)
 llint check(llint n)
 {
 	llint count = 1;
-	for(int i=0;prime[i]*prime[i]<n && n>1;i++)
+	int i=0;
+	while(n>1 && i<prime.size())
 	{
-		printf("prime-> %d\n",prime[i]);
 		int a1 = 0;
 		while(n%prime[i] == 0)
 		{
-			printf("%d\n",prime[i]);
-			a1++;
 			n = n/prime[i];
+			a1++;
 		}
 		count *= (a1+1);
-		
+		i++;
 	}
 	return count;
 }

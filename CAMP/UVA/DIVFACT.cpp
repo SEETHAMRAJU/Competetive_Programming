@@ -7,13 +7,15 @@ vector <int> prime;
 int primes[N];
 void sieve();
 int solve(int l);
+int fact(int p);
 int main()
 {
 	int t;
 	sieve();
 	scanf("%d",&t);
 	vector <int> ans; 
-	for(int i=0;i<t;i++)
+	printf("%d\n",solve(t));
+	/*for(int i=0;i<t;i++)
 	{
 		int p;
 		scanf("%d",&p);
@@ -23,7 +25,7 @@ int main()
 	for(int i=0;i<t;i++)
 	{
 		printf("%d\n",ans[i]);
-	}
+	}*/
 	return 0;
 }
 int solve(int n)
@@ -35,9 +37,10 @@ int solve(int n)
 		while(n%prime[i] == 0)
 		{
 			a++;
-			n /= prime[i];
+			n =n/ prime[i];
 		}
 		ans *= (a+1);
+		ans = ans%M;
 	}
 	return ans;
 }
@@ -65,6 +68,7 @@ void sieve()
 		}
 	}
 }
+
 
 
 
