@@ -57,7 +57,6 @@ void pri()
 		}
 	}
 }
-
 pair<llint,llint> solve(llint l,llint u)
 {
 	llint maxsofar,maxquan;

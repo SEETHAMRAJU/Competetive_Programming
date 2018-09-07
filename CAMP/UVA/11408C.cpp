@@ -1,55 +1,56 @@
 #include<bits/stdc++.h>
-#define N 6000000
 #define append push_back
+#define N 5000001
 using namespace std;
 void sieve();
-int solve(int a,int b);
-bool check(int n);
-void set();
-int ans[6000000];
-int primes[N];
 vector <int> prime;
+int check(int n);
+int primes[N];
+int arr[N];
+void proccess();
+int solve(int a,int b);
 int main()
 {
 	int count = 0;
 	vector <int> answer;
+	sieve();
+	proccess();
+	printf("Hola\n");
 	while(1)
 	{
-		int a,b;
-		scanf("%d",&a);
-		if(a == 0)
+		int x,y;
+		scanf("%d",&x);
+		if(x == 0)
 			break;
-		scanf("%d",&b);
-		answer.append(solve(a,b));
+		scanf("%d",&y);
+		answer.append(solve(x,y));
 		count++;
 	}
 	for(int i=0;i<count;i++)
 	{
-		printf("%d\n",ans[i]);
+		printf("%d\n",answer[i]);
+		
 	}
 	return 0;
 }
-int solve(int a,int b)
+int solve(int x,int y)
 {
-	int answ = 0;
-	for(int i=a;i<=b;i++)
-	{
-		if(ans[i])
-			answ++;
-	}
-	return answ;
+	return arr[y] - arr[max(x-1,0)];
+
 }
 void sieve()
 {
 	for(int i=0;i<N;i++)
 		primes[i] = true;
-	for(int i=2;i>N;i++)
+	for(int i=2;i<N;i++)
 	{
-		if(primes[i])	
+		if(primes[i])
+		{
 			for(int j=2;i*j<N;j++)
 			{
-				primes[i*j] = false;	
+				primes[i*j] = false;
 			}
+		}
 	}
 	for(int i=2;i<N;i++)
 	{
@@ -57,36 +58,36 @@ void sieve()
 			prime.append(i);
 	}
 }
-bool check(int n)
+void proccess()
+{
+	printf("kk");
+	for(int i=2;i<N;i++)
+	{
+		arr[i] = check(i);
+	}
+	printf("kk");
+	for(int i=2;i<N-1;i++)
+	{
+		arr[i+1] = arr[i+1] + arr[i];
+	}
+}
+
+int check(int n)
 {
 	int sum = 0;
-	int i=0;
-	while(n>1)
+	for(int i=0;prime[i]*prime[i] < n;i++)
 	{
 		if(n%prime[i] == 0)
 		{
-			sum += prime[i];
-			while(n%prime[i] == 0)
-				n /= prime[i];
+			sum += n;
+			n = n/prime[i];
 		}
+	}
+	if(primes[sum])
+		return 1;
+	return 0;
+}
 
-	}
-	return primes[sum];
-}
-void set()
-{
-	for(int i=0;i<N;i++)
-	{
-		ans[i] = false;
-	}
-	for(int i=2;i<N;i++)
-	{
-		if(primes[i])		
-			ans[i] = true;
-		else
-		{
-			ans[i] = check(i);
-		}
-	}
-}
+
+
 

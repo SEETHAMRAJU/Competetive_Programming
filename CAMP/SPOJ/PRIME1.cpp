@@ -1,111 +1,133 @@
 #include<bits/stdc++.h>
+#define llint long long int
 #define append push_back
-#define N 1000000
 using namespace std;
-bool check(int n);
-int primes[N];
-vector <int>prime;
-void sieve();
-vector <int> solve(int l,int u);
+vector <llint> prime;
+void primestill(llint n);
+void sieve(llint m);
+vector <llint> get(llint a,llint b);
 int main()
 {
-	int n,l,u;
-	vector <vector<int>> ans; 
-	scanf("%d",&n);
-	sieve();
-	for(int i=0;i<n;i++)
+	llint t,a,b;
+	primestill(1000000000);
+	printf("llllll\n");	
+	scanf("%lld",&t);
+	
+	vector <vector<llint>> answer;
+	for(int i=0;i<t;i++)
 	{
-		scanf("%d %d",&l,&u);
-		vector <int> p= solve(l,u);
-		ans.append(p);
+		scanf("%lld%lld",&a,&b);	
+		printf("llll\n");	
+		vector <llint> p;
+		p = get(a,b);
+		answer.append(p);
+		
 	}
-	for(int i=0;i<n;i++)
+	for(int i=0;i<t;i++)
 	{
-		for(int j=0;j<ans[i].size();i++)
+		for(int j=0;j<answer[i].size();j++)
 		{
-			printf("%d\n",ans[i][j]);
+			printf("%lld\n",answer[i][j]);
 		}
-		printf("\n");
 	}
 	return 0;
 }
-void sieve()
+void sieve(llint n)
 {
-	for(int i=0;i<N;i++)
+	bool arr[n+1];
+	memset(arr,true,sizeof(arr));
+	for(llint i=2;i<n;i++)
 	{
-		primes[i] = true;
-	}
-	for(int i=2;i<N;i++)
-	{
-		if(primes[i])
-		{			
-			for(int j=2;i*j<N;j++)
+		if(arr[i])
+		{
+			for(llint j=2;i*j<n;j++)
 			{
-				primes[i*j] = false;		
+				arr[i*j] = false;
 			}
 		}
 	}
-	for(int i=2;i<N;i++)
+	prime.append(0);
+	for(llint i=2;i<n;i++)
 	{
-		if(primes[i])
+		if(arr[i])
 			prime.append(i);
 	}
 }
-vector <int> solve(int l,int u)
+void primestill(llint n)
 {
-	vector <int> ans;
-	if(u<N)
+	llint limit;
+	limit = floor(sqrt(n)) + 1;
+	llint high,low;
+	low = 0;
+	high = limit;
+	while(low <n)
 	{
-		int j=0;
-		for(;j<prime.size() && prime[j] < l;j++)
+		printf("lllllll\n");
+		if(high >n)
+			high = n;
+		bool arr[limit+1];
+		memset(arr,true,sizeof(arr));
+		for(llint i=1;i<prime.size();i++)
 		{
+			llint lolim = floor(low/prime[i])*prime[i];
+			if(lolim<low)
+				lolim += prime[i]; 
+			for(llint j=lolim;j<high;j+=prime[i])
+			{
+				arr[j-lolim] = false;
+			}
 		}
-		printf("HOla\n");
-		for(;prime[j]<=u && j<prime.size();j++)
+		for(llint i=low;i<high;i++)
 		{
-			ans.append(prime[j]);
-			printf("%d\n",prime[j]);
+			if(arr[i-low])
+				prime.append(arr[i-low]);
 		}
-		printf("Hola");	
-		return ans;
+		low += limit;
+		high += limit;
 	}
-	else if(l<N && u>N)
-	{
-		int j=0;
-		for(;prime[j]<l;j++)
-		{
-		}
-		for(;j<prime.size();j++)
-		{
-			ans.append(prime[j]);
-		}
-		j = ans[j-1];
-		for(;j<=u;j++)
-		{
-			if(check(j))
-				ans.append(j);
-		}
-	}
-	else
-	{
-		for(;l<=u;l++)
-		{
-			if(check(l))
-				ans.append(l);
-		}
-	}
-	printf("Hola\n");
-	return ans;
 }
-bool check(int n)
+vector <llint> get(llint a,llint b)
 {
-	for(int i=0;prime[i]*prime[i] <= n;i++)
+	llint l,r,mid,req;
+	l = 0;
+	r = prime.size() -1;
+	bool flag = true;
+	mid = (l+r)/2;
+	//if not working change the zero added to the prime vector 
+	while(l!=r)
 	{
-		if(n%prime[i] == 0)
-			return true;
+		
+		if((prime[mid-1] < a && prime[mid] >= a))
+		{
+			req = mid;
+			
+		}
+		else if(prime[mid] > a)
+		{
+			r = mid;
+		}
+		else
+		{
+			l = mid;
+		}
+		if(r-l == 1)
+		{
+			if(prime[r]>= a && prime[l] <a)
+			{	
+				req = r;			
+				flag = false;
+				l = r;	
+			}
+		}
+	}	
+	if(l==r && flag)
+	{
+		if(prime[l]>=a)
+			req = l;
 	}
-	return false;
+	vector <llint> p;
+	for(llint i=req;prime[i]<=b;i++)
+		p.append(prime[i]);
+	return prime;
+
 }
-
-
-

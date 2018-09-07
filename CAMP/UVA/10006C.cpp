@@ -6,17 +6,18 @@ int solve(int n);
 int primes[N];
 int powe(int x,int n)
 {
+	int T = n;
 	int res = 1;
-	while(n>1)
+	while(n>0)
 	{
 		if(n%2 == 1)
 		{
-			res = (res*x)%n;
+			res = (res*x)%T;
 		}
 		n = n/2;
-		x =(x *x)%n;
+		x =(x *x)%T;
 	}
-	return res;
+	return res%T;
 }
 void sieve();
 int cnt;
@@ -67,16 +68,17 @@ int solve(int n)
 	}
 	else
 	{
+		int p = 1;
 		for(int i=2;i<n;i++)
 		{
-			int p = powe(i,n-1);
-			printf("%d\n",p);
-			if(p != 1)
-				return -1;
+			if(n%i != 0)
+			{
+				p = powe(i,n);
+				printf("%d\n",p);
+				if(p != n)
+					return -1;
+			}
 		}
-			else if(p == 1 && primes[i] == false)
-				return 1;
-		printf("Hola");
-		return -1;
+		return 1;
 	}
 }
