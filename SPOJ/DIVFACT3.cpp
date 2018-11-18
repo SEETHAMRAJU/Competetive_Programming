@@ -1,27 +1,25 @@
 #include<bits/stdc++.h>
 #define append push_back
 #define llint long long int
-#define N 100001
-#define M 1000000007
+#define N 9000000
 using namespace std;
-map<int,int>p;
+llint M;
 vector<int>prime;
 bool primes[N];
-int spf[N];
 void sieve();
-llint solve(int n);
+llint solve(llint n);
 int main()
 {
 	sieve();
-	int t,n;
-	scanf("%d",&t);
+	llint t,n;
+	scanf("%lld",&t);
 	vector<llint>answer;
 	for(int i=0;i<t;i++)
 	{
-		scanf("%d",&n);
+		scanf("%lld %lld",&n,&M);
 		answer.append(solve(n));
 	}
-	for(int i=0;i<t;i++)
+	for(llint i=0;i<t;i++)
 	{
 		printf("%lld\n",answer[i]);
 	}
@@ -30,39 +28,37 @@ int main()
 }
 void sieve()
 {
-	spf[1] = 1;
-	spf[2] = 2;
 	memset(primes,true,sizeof(primes));
-	for(int i=2;i<N;i++)
+	for(llint i=2;i<N;i++)
 	{
 		if(primes[i])
 		{
-			for(int j=2;i*j<N;j++)
+			for(llint j=2;i*j<N;j++)
 			{
 				primes[i*j] = false;
 			}
 		}
 	}
-	for(int i=2;i<N;i++)
+	for(llint i=2;i<N;i++)
 	{
 		if(primes[i])
 			prime.append(i);
 	}
 }
-llint solve(int n)
+llint solve(llint n)
 {
 	llint total = 1;
-	for(int i=0;prime[i]<=n;i++)
+	for(llint i=0;prime[i]<=n;i++)
 	{
-		int temp = n;
-		int cnt = 1;
-		int a = prime[i];
-		int ans = 0;
+		llint temp = n;
+		llint cnt = 1;
+		llint a = prime[i];
+		llint ans = 0;
 		while(cnt<15)
 		{
-			int temp2 = temp/a; 
+			llint temp2 = temp/a; 
 			if(temp2 > 0)
-				ans = ans + temp2;
+				ans = (ans + temp2)%M;
 			else
 				break;
 			a = a*prime[i];

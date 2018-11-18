@@ -1,42 +1,86 @@
 #include<bits/stdc++.h>
+#define append push_back
 using namespace std;
-map<char,vector<char>> p;
-void put(string q,string t);
+map<int,vector<int>> q;
+void put(string a,string b);
+int dfs(int o);
+stack<int>st;
+int c[101];
 int main()
 {
 	int n;
-	scanf("%d",&n);
-	string q;
-	string l = "abcdefghijklmnopqrstuvwxyz";
+	string f;
 	for(int i=0;i<26;i++)
 	{
-		vector <char> o;
-		p[l[i]] = o;
+		vector<int>o;
+		q[i] = o;
 	}
-	vector <string> ques;
-	cin >> q;
-	ques.append(q);
-	for(int i=0;i<n-1;i++)
+	string s,p;
+	scanf("%d",&n);
+	cin >> s;
+	for(int o=1;o<n;o++)
 	{
-		cin >> q;
-		ques.append(q);
-		put(q[i-1],q[i]);
+		cin >> p;
+		put(s,p);
+		s = p;
 	}
+	int temp;
+	for(int i=25;i>=0;i--)
+	{
+		if(c[i] == 0)
+		{		
+			temp = dfs(i);
+			if(temp == -1)
+			{
+				printf("Impossible\n");
+				return 0;
+			}		
+		}
+	}
+	string ans = "";
+	int arr[26];
+	memset(arr,1,sizeof(arr));
+	while(!st.empty())
+	{
+		temp = st.top();	
+		ans += char(temp+'a');
+		arr[temp]=1;
+		st.pop();
+	}
+	cout << ans << endl;
 	return 0;
 }
-void put(string q,string t)
+void put(string a,string b)
 {
-	if(q[0] != t[0])
+	int i = 0;
+	int p = min(a.size(),b.size());
+	while(a[i]==b[i] && i<p)
 	{
-		p[q[0]].append(t[0]);
+		i++;
 	}
+	if(b[i]-'a' < 0)
+	{
+		q[0].append(0);
+	}	
 	else
+		q[a[i]-'a'].append(b[i]-'a');
+}
+int dfs(int o)
+{
+	int ans=0;
+	for(int i=0;i<q[o].size();i++)
 	{
-		int i= 0;
-		while(q[i] == t[i])
-		{
-			i++;
-		}		
-		p[q[i]].append(t[i]);
+		if(c[q[o][i]] == 2)
+			{return -1;}
+		else if(c[q[o][i]] == 0)
+		{	
+			c[q[o][i]] = 2;
+			ans = dfs(q[o][i]);	
+			if(ans==-1)
+				{return -1;}
+		}
 	}
+	c[o] = 1;	
+	st.push(o);
+	return 1;	
 }

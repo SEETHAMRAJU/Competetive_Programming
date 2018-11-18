@@ -1,45 +1,42 @@
 #include<bits/stdc++.h>
 #define append push_back
-#define insert push_front
-#define pop pop_back()
+#define N 100001
 using namespace std;
-void printvector(vector <int> l);
-int solve(int x);
+int arr[N];
+int solve(int n);
 int main()
 {
-	vector <int> answer;
+	memset(arr,-1,sizeof(arr));
 	int n;
-	while(scanf("%d",&n)!= EOF)
+	int i=1;
+	for(int i=0;i*i*i<N;i++)
 	{
-		answer.append(n);
+		arr[i*i*i] = 1;
 	}
-	for(int i=0;i<answer.size();i++)
+	while(scanf("%d",&n)!=EOF)
 	{
-		int ans = solve(answer[i]);
-		cout << "Case #" << i+1 << ": " << ans << endl;
+		printf("Case #%d: %d\n",i,solve(n));
+		i++;
 	}
-	return 0;
-}
 
-void printvector(vector <int> l)
-{
-	for(int i=0;i<l.size();i++)
-	{
-		cout << l[i] << endl;
-	}
+	return 0;
 }
 int solve(int n)
 {
-	double tn = n;
-	double x;
-	int m=0;
-	while(tn >0)
+	if(arr[n] != -1)
+		return arr[n];
+	else
 	{
-		x = floor(cbrt(tn));
-		tn = tn - (x*x*x);
-		m++;
+		int ans = INT_MAX;
+		for(int i=1;i*i*i<=n;i++)
+		{
+			ans = min(ans,1+solve(n-i*i*i));
+		}
+		arr[n] = ans;	
 	}
-	return m;
+	return arr[n];
 }
+
+
 
 
