@@ -1,107 +1,82 @@
 #include<bits/stdc++.h>
 #define append push_back
-#define llint long long int
+#define SIZE 2000000
+//#define llint long long int
 using namespace std;
-struct node
+struct node 
 {
-	int l,r,data;
-	struct node *left,*right,*parent;
+	int prefixsum,suffixsum,maxsum,l,r,sum;
 };
-struct node *generatetree(vector <llint> arr,llint n,llint m);
-llint findmin(vector <llint> arr,llint n,llint m);
-llint RMQ(llint i,llint j,struct node *head,vector <llint> arr);
-llint findnode(struct node *head,int a,int b);
+struct node tree[SIZE];
+void build(vector<int> q,int n);
+int query(int id,int l,int r);
 int main()
 {
-	llint N,M;
-	vector <llint> arr;
-	scanf("%lld",&N);
-	for(llint i=0;i<N;i++)
+	vector<int>q;
+	int t,n,temp;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++)
 	{
-		scanf("%lld",&temp);
-		arr.append(temp);
+		scanf("%d",&temp);
+		q.append(temp);
 	}
-	scanf("%lld",&M);
-	vector <pair<llint,llint>> query;
-	for(llint i=0;i<M;i++)
+	
+	int ans = 1;
+	while(ans<n)
+		ans = ans*2;
+	n = ans;
+	build(q,n);
+	scanf("%d",&t);
+	int l,r;
+	for(int i=0;i<t;i++)
 	{
-		scanf("%lld %lld"&temp1,temp2);
-		query.append(make_pair(temp1,temp2));
-	}
-	struct node *head;
-	head = new struct node(1);
-	head = generatetree(arr,0,N-1);
-	vector <llint> answer;
-	for(llint i=0;i<M;i++)
-	{
-		llint ans = RMQ(head,query[i].first,query[i].second);
-		answer.append(ans);
-	}
-	for(llint i=0;i<M;i++)
-	{
-		printf("%d\n",answer[i]);
+		scanf("%d %d",&l,&r);
+		printf("%d\n",query(1,l-1,r-1));
 	}
 	return 0;
 }
-struct node *generatetree(vector <llint> arr,llint i,llint j)
+void build(vector<int>q,int n)
 {
-	struct node *head;
-	head = new struct node (1);
-	if(i == j)
+	for(int i=0;i<q.size();i++)
 	{
-		head->l = i;
-		head->r = j;
-		head->data = arr[i];
-		head->left = NULL;
-		head->right = NULL;
-		return head;
+		tree[n+i].l= i;
+		tree[n+i].r= i;
+		tree[n+i].suffixsum = q[i];
+		tree[n+i].prefixsum = q[i];
+		tree[n+i].maxsum = q[i];
+		tree[n+i].sum = q[i];
 	}
+	for(int i=q.size();i<n;i++)
+	{
+		tree[n+i].l = i;
+		tree[n+i].r = i;
+		tree[n+i].suffixsum = INT_MIN + 16000;
+		tree[n+i].prefixsum = INT_MIN + 16000;
+		tree[n+i].maxsum = INT_MIN + 16000;
+		tree[n+i].sum = INT_MIN + 16000;
+	}
+	for(int i=n-1;i>0;i--)
+	{
+		tree[i].suffixsum = max(tree[2*i+1].suffixsum,max(tree[2*i+1].sum + tree[2*i].suffixsum,tree[2*i+1].sum));
+		tree[i].prefixsum = max(tree[2*i].prefixsum,max(tree[2*i].sum,tree[2*i].sum + tree[2*i+1].prefixsum));
+		tree[i].sum = tree[2*i].sum + tree[2*i+1].sum;
+		tree[i].maxsum = max(tree[2*i].maxsum,max(tree[2*i+1].maxsum,tree[2*i].suffixsum + tree[2*i+1].prefixsum));
+		tree[i].l = tree[2*i].l;
+		tree[i].r = tree[2*i+1].r;
+	}
+}
+int query(int id,int l,int r)
+{
+	if(tree[id].l == l && tree[id].r == r)	
+		return tree[id].maxsum;
+	else if(tree[2*id].r < l)
+		return query(2*id+1,l,r);
+	else if(tree[2*id+1].l > r)
+		return query(2*id,l,r);
 	else
 	{
-		head->l = i;
-		head->r = j;
-		head->data = findmin(arr,i,j);
-	}
-	llint mid = (i+j)/2;
-	head->left = generatetree(arr,i,mid);
-	head->right = generatetree(arr,mid+1,j);
-	return head;
-}
-llint findmin(vector <llint> arr,llint i,llint j)
-{
-	llint minsofar = arr[i];
-	while(i<=j)
-	{
-		minsofar = min(minsofar,arr[i]);
-		i++;
-	}
-	return minsofar;
-}
-llint RMQ(llint i,llint j,struct node *head)
-{
-	if(i == j)
-	{
-		return i;
-	}
-	else
-	{
-		while(head != NULL)
-		{
-			if((head->left->r) >= j)
-			{
-				head = head->left;
-			}
-			else if((head->right->l) <= i)
-			{
-				head = head->right;
-			}
-			else
-			{
-				
-			}
-		}
-
+		int a = query(2*id,l,tree[2*id].r);
+		int b= query(2*id+1,tree[2*id+1].l,r);
+		return max(a,max(b,a+b));
 	}
 }
-
-
