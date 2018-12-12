@@ -1,29 +1,45 @@
 #include<bits/stdc++.h>
-#define llint long long int
 #define append push_back
 using namespace std;
-llint arr[1001];
+int arr[101];
 int main()
 {
-
-	int n;
-	llint temp;
-	scanf("%d",&n);
+	int n,a,b;
+	scanf("%d%d%d",&n,&a,&b);
+	int p[2];
+	p[0] = a;
+	p[1] = b;
 	for(int i=0;i<n;i++)
+		scanf("%d",&arr[i]);
+	int i=0;
+	int total = 0;
+	int j=n-1;
+	bool flag = true;
+	while(i!=j && i<j) 
 	{
-		scanf("%lld",&temp);
-		if(temp%2 == 0)
-			arr[i] = temp-1;
-		else
-			arr[i] = temp;
+		if(arr[i] != arr[j])
+		{
+			if(arr[i] == 2 || arr[j] == 2)
+			{
+				total += p[min(arr[i],arr[j])];
+			}
+			else
+			{
+				printf("-1\n");
+				return 0;
+			}
+		}
+		else if(arr[i] == arr[j] && arr[i] == 2)
+		{
+			total += 2*min(a,b);
+			flag = false;
+		}
+		i++;
+		j--;
 	}
-	for(int i=0;i<n;i++)
-	{
-		
-		printf("%lld ",arr[i]);
-
-	}
-	printf("\n");
+	if(i == j)
+		total += min(a,b);
+	printf("%d\n",total);	
 	return 0;
 }
 

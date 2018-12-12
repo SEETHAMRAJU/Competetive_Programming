@@ -1,38 +1,28 @@
-#include<bits/stdc++.h>
-#define append push_back
+#include<iostream>
+#include<vector>
+#include<list>
+#include<string>
+#include<algorithm>
 using namespace std;
-int arr[11];
+
 int main()
 {
-	int n;
-	scanf("%d",&n);
-	int Grig,And,gtot,atot;
-	grig = 0;
-	And = 0;
-	atot = 0;
-	gtot = 0;
-	for(int i=0;i<n;i++)
+	int n,k;
+	scanf("%d%d",&n,&k);
+	while(k != 0)
 	{
-		scanf("%d",&arr[i]);
-		if(i%2 == 0)
+		if(n%10 < k)
 		{
-			grig++;
-			atot += arr[i];
+			k = k - n%10 - 1;
+			n = n/10;
 		}
 		else
 		{
-			And++;
-			gtot += arr[i];
+			n = n - (k);
+			k = 0;
+			break;
 		}
 	}
-	if(atot )
-
-
-
+	cout << n << endl;
 	return 0;
 }
-
-
-
-
-
