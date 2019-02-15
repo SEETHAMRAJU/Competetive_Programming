@@ -1,75 +1,80 @@
 #include<bits/stdc++.h>
 #define append push_back
-#define llint long long int
+#define endl "\n"
+#define N 1000000
+#define M 1000000007
+#define _ cout << "hola" <<endl;
+#define IOS ios_base::sync_with_stdio(false);cin.tie(NULL)
+#define ll long long int
+#define cover(arr,val) memset(arr,val,sizeof(arr)) 
 using namespace std;
-vector <string> q;
-
-void s();
-llint po(llint x,llint n,llint m);
-string solve(llint temp);
-llint div(string s,llint n);
-
+vector<string>q;
+void calc();
+string solve(ll n);
+bool isDiv(ll n,string s);
 int main()
 {
-	llint t,temp;
-	scanf("%lld",&t);
-	s();
-	cout << q.size() << endl;
-	vector <string> answer;
-	for(llint i=0;i<t;i++)
+	//IOS;
+	int k;
+	cin >> k;
+	ll n;
+	calc();
+	while(k--)
 	{
-		scanf("%lld",&temp);
-		answer.append(solve(temp));
+		cin >> n;
+		cout << solve(n) << endl;
 	}
-//	cout << div("10000",3) << endl;
-	for(llint i=0;i<t;i++)
-		cout << answer[i] << endl;
 	return 0;
 }
-void s()
+string solve(ll n)
 {
-	q.append("0");
-	q.append("1");
-	llint cur = 1;
-	while(q[q.size()-1].size() < 25)
+	for(int i=1;i<q.size();i++)
 	{
-		q.append(q[cur]+"0");
-		q.append(q[cur]+"1");
-		cur++;
-	}
-}
-string solve(llint temp)
-{
-	for(llint i=1;i<q.size();i++)
-	{
-		if(div(q[i],temp))
+		if(isDiv(n,q[i]))
 			return q[i];
+	}
+	int i=q.size()-1;
+	string temp ="";
+	while(true)
+	{
+		temp = (q[i]+"0");
+		if(isDiv(n,temp))
+			return temp;
+		q.append(temp);
+		temp = q[i] + "1";
+		q.append(temp);
+		if(isDiv(n,temp))
+			return temp;
+		i++;	
 	}
 	return "-1";
 }
-llint div(string s,llint n)
+void calc()
 {
-	llint ans = 0;
-	llint m = s.size();
-	for(llint i=0;i<m;i++)
+	q.append("1");
+	int i=0;
+	while(i<100)
 	{
-		ans = ((ans*10) + (s[i]-'0'))%n;
+		q.append(q[i]+"0");
+		q.append(q[i]+"1");
+		i++;
 	}
-	if(ans%n == 0)
+}
+bool isDiv(ll n,string s)
+{
+	ll ans= 0;
+	int i=0;
+	while(i<s.size())
+	{
+		if(s[i]=='1')
+		{
+			ans = (10*ans + 1)%n;	
+		}
+		else
+			ans = (ans*10)%n;
+		i++;
+	}
+	if(ans==0)
 		return true;
 	return false;
-}
-llint po(llint x,llint n,llint m)
-{
-	llint res = 1;
-	while(n>0)
-	{
-		if(n%2 == 1)
-		{
-			res = (res*x)%m;
-		}
-		n=n/2;
-		x = (x*x)%m;
-	}
-	return res%m;
 }

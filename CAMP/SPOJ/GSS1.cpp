@@ -1,82 +1,86 @@
 #include<bits/stdc++.h>
 #define append push_back
-#define SIZE 2000000
-//#define llint long long int
+#define N 1000001
+#define M 1000000007
+#define endl "\n"
+#define IOS ios_base::sync_with_stdio(false);cin.tie(NULL)
+#define ll long long int
+#define cover(arr,val) memset(arr,val,sizeof(arr)) 
+
 using namespace std;
+ll maxi(ll x,ll y)
+{
+	if(y>x)
+		return y;
+	return x;
+}
 struct node 
 {
-	int prefixsum,suffixsum,maxsum,l,r,sum;
+	ll prefix,suffix,sum,maxsum,l,r;
+	void assign(ll val,int id)
+	{
+		prefix=sum=suffix=maxsum=val;
+		l=r=id;	
+	}
+	void combine(node& left,node& right)
+	{
+		prefix = maxi(left.prefix,left.sum+right.prefix);
+		suffix = maxi(right.suffix,right.sum+left.suffix);
+		sum = right.sum + left.sum;
+		maxsum = maxi(maxi(left.maxsum,maxi(prefix,maxi(suffix,left.suffix+right.prefix))),right.maxsum);
+		l = left.l;
+		r = right.r;
+	}
+
 };
-struct node tree[SIZE];
-void build(vector<int> q,int n);
-int query(int id,int l,int r);
-int main()
+node tree[N];
+vector<ll>q;
+void build(ll id,ll l,ll r)
 {
-	vector<int>q;
-	int t,n,temp;
-	scanf("%d",&n);
-	for(int i=0;i<n;i++)
-	{
-		scanf("%d",&temp);
-		q.append(temp);
-	}
-	
-	int ans = 1;
-	while(ans<n)
-		ans = ans*2;
-	n = ans;
-	build(q,n);
-	scanf("%d",&t);
-	int l,r;
-	for(int i=0;i<t;i++)
-	{
-		scanf("%d %d",&l,&r);
-		printf("%d\n",query(1,l-1,r-1));
-	}
-	return 0;
-}
-void build(vector<int>q,int n)
-{
-	for(int i=0;i<q.size();i++)
-	{
-		tree[n+i].l= i;
-		tree[n+i].r= i;
-		tree[n+i].suffixsum = q[i];
-		tree[n+i].prefixsum = q[i];
-		tree[n+i].maxsum = q[i];
-		tree[n+i].sum = q[i];
-	}
-	for(int i=q.size();i<n;i++)
-	{
-		tree[n+i].l = i;
-		tree[n+i].r = i;
-		tree[n+i].suffixsum = INT_MIN + 16000;
-		tree[n+i].prefixsum = INT_MIN + 16000;
-		tree[n+i].maxsum = INT_MIN + 16000;
-		tree[n+i].sum = INT_MIN + 16000;
-	}
-	for(int i=n-1;i>0;i--)
-	{
-		tree[i].suffixsum = max(tree[2*i+1].suffixsum,max(tree[2*i+1].sum + tree[2*i].suffixsum,tree[2*i+1].sum));
-		tree[i].prefixsum = max(tree[2*i].prefixsum,max(tree[2*i].sum,tree[2*i].sum + tree[2*i+1].prefixsum));
-		tree[i].sum = tree[2*i].sum + tree[2*i+1].sum;
-		tree[i].maxsum = max(tree[2*i].maxsum,max(tree[2*i+1].maxsum,tree[2*i].suffixsum + tree[2*i+1].prefixsum));
-		tree[i].l = tree[2*i].l;
-		tree[i].r = tree[2*i+1].r;
-	}
-}
-int query(int id,int l,int r)
-{
-	if(tree[id].l == l && tree[id].r == r)	
-		return tree[id].maxsum;
-	else if(tree[2*id].r < l)
-		return query(2*id+1,l,r);
-	else if(tree[2*id+1].l > r)
-		return query(2*id,l,r);
+	if(l == r)
+		tree[id].assign(q[l],l);
 	else
 	{
-		int a = query(2*id,l,tree[2*id].r);
-		int b= query(2*id+1,tree[2*id+1].l,r);
-		return max(a,max(b,a+b));
+		build(2*id,l,(l+r)/2);
+		build(2*id+1,(l+r)/2+1,r);
+		tree[id].combine(tree[2*id],tree[2*id+1]);
 	}
+}
+node query(ll id,ll l,ll r)
+{
+	ll mid = (tree[id].l + tree[id].r)/2;
+	if(tree[id].l == l && tree[id].r == r)
+		return tree[id];
+	else if(mid >=r)
+		return query(2*id,l,r);
+	else if(mid < l)
+		return query(2*id+1,l,r);
+	else
+	{
+		node result;
+		node left = query(2*id,l,mid),right = query(2*id+1,mid+1,r);
+		result.combine(left,right);
+		return result;
+	}
+}
+int main()
+{
+	ll temp,n,size=1,m,l,r;
+	IOS;
+	cin >> n;
+	while(size<n)
+		size*=2;
+	for(int i=0;i<n;i++)
+	{
+		cin >> temp;
+		q.append(temp);
+	}
+	build(1,0,n-1);
+	cin >> m;
+	for(int i=0;i<m;i++)
+	{
+		cin >> l >> r;
+		cout << query(1,l-1,r-1).maxsum << endl;
+	}
+	return 0;
 }

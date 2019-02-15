@@ -1,36 +1,30 @@
+
 #include<bits/stdc++.h>
-#define llint long long int 
 #define append push_back
+#define N 1000000
+#define M 1000000007
+#define IOS ios_base::sync_with_stdio(false);cin.tie(NULL)
+#define ll long long int
+#define cover(arr,val) memset(arr,val,sizeof(arr)) 
 using namespace std;
-llint maxi(llint x,llint y)
-{
-	if(y>x)
-		return y;
-	return x;
-}
-llint arr[100001];
-llint f[100001];
+ll arr[N+1],dp[N+1],ans[N+1],cnt[N+1];
 int main()
 {
-	llint n,temp;
-	scanf("%lld",&n);
-	for(llint i=0;i<n;i++)
+	IOS;
+	ll n;
+	cin >> n;
+	for(ll i=0;i<n;i++)
 	{
-		scanf("%lld",&temp);
-		arr[temp]++;
+		cin >> arr[i];
+		cnt[arr[i]]++;
 	}
-	f[0] = 0;
-	f[1] = arr[1];
-	for(llint i=2;i<n+1;i++)
+	ans[0] =0;
+	ans[1] = cnt[1];
+	for(ll i=2;i<=N;i++)
 	{
-		f[i] = maxi(arr[i]*i+f[i-2],f[i-1]);
+		ans[i] = max(ans[i-1],ans[i-2]+cnt[i]*i);
+		//the first one is if we choose the i-1 th element then we won't choose this one else the second one 
 	}
-	
-	printf("%lld\n",f[n]);
+	cout << ans[N] << endl;
 	return 0;
 }
-
-
-
-
-
