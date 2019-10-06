@@ -1,25 +1,19 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<vector>
+#include<list>
+#include<string>
+#include<algorithm>
 using namespace std;
+
 int main()
 {
-	long long int n;
-	scanf("%lld",&n);
-	if(n == 0)
-	{
-		printf("1\n");
-		return 0;
-	}
-	/*
-	1 = 8	 5 	
-	2 = 4    6
-	3 = 2	 7 
-	4 = 6	 8 
-	*/
-	//            0 1 2 3 
-	int arr[5] = {6,8,4,2};
-	if(n>=4)
-		printf("%d\n",arr[n%4]);
-	else
-		printf("%d\n",arr[n]);
+	int n;
+	cin >> n;
+	int arr[4];
+	arr[0] = 6;
+	arr[1] = 8;
+	arr[2] = 4;
+	arr[3] = 2;
+	cout << arr[n%4] << endl ;
 	return 0;
 }

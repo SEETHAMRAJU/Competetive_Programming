@@ -1,31 +1,28 @@
-#include<bits/stdc++.h>
-#define append push_back
-#define SIZE 1000000
+#include<iostream>
+#include<vector>
+#include<list>
+#include<string>
+#include<algorithm>
 using namespace std;
 
 int main()
 {
-	int t,n,m;
-	scanf("%d",&t);
-	for(int i=0;i<t;i++)
+	int n,k;
+	scanf("%d%d",&n,&k);
+	while(k != 0)
 	{
-		scanf("%d%d",&n,&m);
-		string ans = "";
-		for(int i=0;i<n;i++)
+		if(n%10 < k)
 		{
-			if(i<m)
-				ans += char(97+i);
-			else
-			{
-				ans += char(97+(i%m));
-			}
+			k = k - n%10 - 1;
+			n = n/10;
 		}
-		cout << ans << endl;
+		else
+		{
+			n = n - (k);
+			k = 0;
+			break;
+		}
 	}
+	cout << n << endl;
 	return 0;
 }
-
-
-
-
-

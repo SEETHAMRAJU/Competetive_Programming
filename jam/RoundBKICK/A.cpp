@@ -1,18 +1,40 @@
 #include<bits/stdc++.h>
+#define append push_back
+#define endl "\n"
+#define N 1000000
+#define M 1000000007
+#define IOS ios_base::sync_with_stdio(false);cin.tie(NULL)
+#define ll long long int
+#define cover(arr,val) memset(arr,val,sizeof(arr)) 
 using namespace std;
+char x[26] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 struct node 
 {
-	int data,l,r;
-	void assign(int x,int index)
+	int l,r;
+	map<char,int> data;
+	void assign(char s ,int index)
 	{
-		data = x;
+		for(int i=0;i<26;i++)
+		{
+			data[x[i]] = 0;
+		}
+		data[s] += 1;
 		l = index;
 		r = index;
 	}
 	void combine(node &n1,node &n2)
 	{
+		for(int i=0;i<26;i++)
+		{
+			char temp = x[i];
+			data[temp] = n1.data[temp] + n2.data[temp];
+		}
+		l = n1.l;
+		r = n2.r;
 	}
 };
+node tree[N];
+string q;
 void update(ll id,ll index,int val)
 {
 	if(tree[id].l == tree[id].r && tree[id].l == index)
@@ -59,5 +81,17 @@ node query(ll id,ll l,ll r)
 }
 int main()
 {
+	IOS;
+	int n,q,a,b;
+	cin >> n >> q;
+	cin >> s;
+	struct node ans;
+	build(1,1,n);
+	for(int i=0;i<q;i++)
+	{
+		cin >> a >> b;
+		ans = query(1,a,b);
+	}
+	cout << 
 	return 0;
 }
