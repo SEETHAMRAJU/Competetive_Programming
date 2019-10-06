@@ -75,5 +75,5 @@ int query(int x,int y,int id=1,int l=0,int r=n-1)
 }
 int main()
 {
-
+	return 0;
 }
